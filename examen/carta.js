@@ -38,7 +38,7 @@ class Carta {
     const codeElem = document.createElement('h3'); //para mostrar el code de la carta, ejemplo h3 es hearts 3 (en ingles se entiende mejor)
     codeElem.textContent = this.code;
 
-        const img = document.createElement('img');
+    const img = document.createElement('img');
     img.src = this.imagen;
     img.alt = this.code;
     img.style.cursor = 'pointer';
@@ -53,7 +53,7 @@ class Carta {
     btnGuardar.textContent = 'Guardar';
     btnGuardar.className = 'btn-guardar';
     btnGuardar.addEventListener('click', () => {
-      Carta.guardarCarta(this);
+      Carta.guardarCarta(this); 
       alert(`Carta "${this.code}" guardada`);
     });
     
@@ -65,4 +65,22 @@ class Carta {
     return div;
   }
 
+
+  static guardarCarta(carta) {
+    let guardadas = localStorage.getItem('cartasGuardadas');
+    let arrayCartas = guardadas ? JSON.parse(guardadas) : [];
+
+    const yaExiste = arrayCartas.some(c => {
+      const cartaObj = JSON.parse(c);
+      return cartaObj.code === carta.code;
+    }); // ASUMAMOS que no se pueden repetir y listo
+    
+    if (!yaExiste) {
+      arrayCartas.push(carta.toString());
+      localStorage.setItem('cartasGuardadas', JSON.stringify(arrayCartas));
+      console.log('Cartas guardadas:', arrayCartas.length);
+    } else {
+      alert('Esta carta ya esta guardada');
+    }
+  }
 }
